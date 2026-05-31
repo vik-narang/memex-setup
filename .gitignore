@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# Obsidian workspace state (per-vault, not part of the starter)
+.obsidian/
+
+# Python
+__pycache__/
+*.pyc
+
+# Hook test artifacts (if someone runs memex-hooks.py from this dir while testing)
+*.flag
+/tmp/memex-hooks.*
+
+# Editor noise
+.vscode/
+.idea/
+*.swp

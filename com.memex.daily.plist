@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS launchd plist for memex daily hooks.
+  1. Edit the script path below to match where you put memex-hooks.py
+  2. Copy to ~/Library/LaunchAgents/com.memex.daily.plist
+  3. Run: launchctl load ~/Library/LaunchAgents/com.memex.daily.plist
+
+  Fires at 9am daily. If machine is asleep, fires on next wake.
+  Logs to /tmp/memex-hooks.log and /tmp/memex-hooks.err
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.memex.daily</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>/path/to/your/scripts/memex-hooks.py</string>
+    </array>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/memex-hooks.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/memex-hooks.err</string>
+</dict>
+</plist>
