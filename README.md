@@ -176,6 +176,34 @@ Logs (macOS): `/tmp/memex-hooks.log`, `/tmp/memex-hooks.err`.
 - **Weekly review:** recurring private calendar block, Fridays ~3pm, 30 min — to review the week's note before the LLM closes it out.
 - **Lint:** the LLM will offer to schedule one when the `lint-due.flag` appears (roughly monthly). Or create a recurring monthly block manually.
 
+### 9. Set up session wrap-up (recommended, Claude Code only)
+
+Two pieces work together: a slash command you run before ending a session, and a `SessionEnd` hook that preserves the transcript if you forget.
+
+- **Slash command** — `.claude/commands/wrap-up.md` ships with the repo. With the vault as the working directory, Claude Code picks it up automatically and you can run `/wrap-up` at any point. It synthesizes the session, proposes what to file (per the schema's `## When to File Vault Entries from Conversations`), writes on confirm, and appends a `wrapup` entry to `log.md`.
+
+- **SessionEnd hook (the safety net)** — `wrap-up-hook.py` copies the ending session's transcript JSONL into `<FLAGS_DIR>/pending-wrapups/` and writes `wrap-up-pending.flag`. The next session sees the flag at startup and offers to run `/wrap-up` to drain the pending transcripts. Without this hook, learnings from a session you exit without running `/wrap-up` are gone.
+
+  Edit `VAULT` and `FLAGS_DIR` at the top of `wrap-up-hook.py` to match your paths, then add a `SessionEnd` hook to `~/.claude/settings.json`:
+
+  ```json
+  {
+    "hooks": {
+      "SessionEnd": [
+        {
+          "hooks": [
+            { "type": "command", "command": "/usr/bin/python3 /absolute/path/to/wrap-up-hook.py" }
+          ]
+        }
+      ]
+    }
+  }
+  ```
+
+  Replace `/absolute/path/to/wrap-up-hook.py` with the real path (e.g. `~/memex-v/wrap-up-hook.py` expanded). The hook is best-effort: any error exits 0 so it never blocks session exit.
+
+Day-to-day pattern: run `/wrap-up` before quitting Claude Code. If you forget, the next session opens with a "pending wrap-up" reminder and `/wrap-up` will drain whatever was preserved.
+
 ---
 
 ## Day-to-Day Usage
@@ -271,6 +299,8 @@ If you move machines or share the vault:
 | `memex-schema.md` (or its renamed form) | loaded by your LLM agent |
 | `memex-hooks.py` | path of your choice (matches `FLAGS_DIR` setting) |
 | `com.memex.daily.plist` | `~/Library/LaunchAgents/` (macOS) |
+| `wrap-up-hook.py` | path of your choice (referenced from `~/.claude/settings.json` SessionEnd hook) |
+| `.claude/commands/wrap-up.md` | inside the vault — Claude Code auto-discovers project commands |
 
 ---
 

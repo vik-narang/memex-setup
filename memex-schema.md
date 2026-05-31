@@ -134,6 +134,12 @@ Quick scan: `grep "^## \[" log.md | tail -10`
 - At session start: if flag exists, mention the creation silently, delete flag
 - Set a Friday ~3pm calendar reminder to review the week's note
 
+### Session Wrap-Up (per session)
+- A Claude Code `SessionEnd` hook (`wrap-up-hook.py`) copies the ending session's transcript JSONL into `<FLAGS_DIR>/pending-wrapups/` and writes `wrap-up-pending.flag`
+- At session start: if `wrap-up-pending.flag` exists, surface it and offer to run `/wrap-up` to drain the pending transcripts before doing other work
+- The `/wrap-up` slash command (`.claude/commands/wrap-up.md`) drains `pending-wrapups/`, proposes filings from both pending transcripts and the live session, writes on confirm, and clears the flag
+- See `## Operations § Wrap-Up` for the step-by-step
+
 ### Lint (every 30 days)
 - A hook/cron script checks `log.md` for the last `lint` entry; if 30+ days ago, writes a flag file (e.g. `~/.memex/lint-due.flag`)
 - At session start: if flag exists, surface the reminder, create a calendar block on the closest Friday to the 30-day mark, delete flag
@@ -161,6 +167,16 @@ See `README.md` for hook setup instructions (launchd on macOS, cron on Linux).
 2. Check `index.md` for stale entries
 3. Surface contradictions and stale claims
 4. Append to `log.md`: `## [YYYY-MM-DD] lint | summary`
+
+### Wrap-Up
+Triggered by the `/wrap-up` slash command at session end (or at the start of a session if `wrap-up-pending.flag` is present from a prior session that exited without wrap-up).
+
+1. Drain `<FLAGS_DIR>/pending-wrapups/*.jsonl` — each file is a prior session's transcript. Read, extract per `## When to File Vault Entries from Conversations`, delete the file when done.
+2. Scan the current session for the same material.
+3. Propose filings to the human (destination, one-line summary, new vs. update). Wait for confirm.
+4. On confirm: write pages, refresh cross-references, update `index.md`.
+5. Append to `log.md`: `## [YYYY-MM-DD] wrapup | <theme>` (or `wrapup | no-op` if nothing substantive).
+6. Delete `<FLAGS_DIR>/wrap-up-pending.flag` if present.
 
 ## LLM Rules
 - Never modify `llm-init.md` except appending a dated section at the bottom
