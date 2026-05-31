@@ -22,10 +22,26 @@ Read `llm-init.md` for the full philosophy. This README covers setup, configurat
 
 ---
 
+## Quickstart (for the impatient)
+
+```bash
+git clone https://github.com/vik-narang/memex-setup ~/memex-v
+cd ~/memex-v
+# 1. Open ~/memex-v in Obsidian (File → Open Vault → Open folder as vault → trust author)
+# 2. Install Dataview, Templater, Periodic Notes — then configure them per Step 4 below (most-skipped step)
+# 3. In your LLM agent, with ~/memex-v as the working directory:
+#    > "Read llm-init.md and initialize this vault according to the schema."
+# 4. (Optional) Wire the daily launchd hook for the weekly note + lint reminder (Step 7)
+```
+
+Full walkthrough below.
+
+---
+
 ## What You Need
 
 - **Obsidian** — [obsidian.md](https://obsidian.md) (free). Your interface for browsing and reviewing the vault.
-- **An LLM agent with local file access** — Claude Code, Kiro CLI, Codex, Cursor, or any agent that can read and write local files.
+- **An LLM agent with local file access** — Claude Code, Kiro, Codex, Cursor, or any agent that can read and write local files.
 - **Python 3** — for the maintenance hook (weekly note + lint reminder).
 
 ---
@@ -34,13 +50,13 @@ Read `llm-init.md` for the full philosophy. This README covers setup, configurat
 
 The setup has two halves: **install and configure Obsidian + plugins** (Steps 1–4 below), then **point your LLM at the schema and ask it to initialize** (Steps 5–6). Do them in that order — the LLM init writes files that Obsidian will index when you open the vault, and the templates rely on plugin features.
 
-### 1. Copy this repo to your vault location
+### 1. Clone the repo to your vault location
 
 ```bash
-cp -r memex-setup ~/my-vault
+git clone https://github.com/vik-narang/memex-setup ~/memex-v
 ```
 
-Pick any path you like. The schema and hook script reference `~/memex-v` as the default — easiest to use that path unless you have a reason not to.
+Pick any path you like — `~/memex-v` is the default referenced by the schema and hook script. If you choose a different path, you'll edit one line in `memex-schema.md` (Step 5) and two in `memex-hooks.py` (Step 7).
 
 ### 2. Open the vault in Obsidian
 
@@ -136,12 +152,7 @@ The hook script does two things:
 
 Both write flag files into `~/.memex/` (the default — change `FLAGS_DIR` in `memex-hooks.py` if you prefer somewhere else, e.g. `~/.kiro/` for Kiro users). Your LLM checks the flag dir at session start.
 
-Configure the hook script:
-```bash
-cp memex-hooks.py ~/memex-v/memex-hooks.py     # or any path you prefer
-```
-
-Edit `VAULT` and `FLAGS_DIR` at the top of the script if you didn't use the defaults.
+If you cloned the repo into `~/memex-v` (Quickstart default), `memex-hooks.py` is already in place. Otherwise, move it somewhere stable and edit `VAULT` + `FLAGS_DIR` at the top of the script to match your paths.
 
 **macOS (launchd):**
 ```bash
@@ -183,7 +194,7 @@ Everything is one-line triggers. The schema (`memex-schema.md`, section `## Oper
 
 After the answer, the agent will ask whether to file the synthesis as a report in `reports/`. Say yes for anything worth keeping.
 
-**Weekly review** — open the current `weeklyNotes/YYYY-WNN.md` in Obsidian. The LLM updates it through the week; on Friday:
+**Weekly review** — open the current week's note (e.g. `weeklyNotes/2026-W22.md`) in Obsidian. The LLM updates it through the week; on Friday:
 > "Close out this week's note."
 
 The agent will fill in missing context, surface decisions, link to anything created during the week, and prompt you for anything ambiguous.
@@ -267,4 +278,4 @@ If you move machines or share the vault:
 
 This starter is a concrete implementation of the "LLM Wiki" pattern proposed by Andrej Karpathy in [this gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). The three-layer architecture (raw sources / LLM-maintained wiki / schema document), the `index.md` + `log.md` convention, the schema-as-operating-manual idea, and the framing of the wiki as a compounding artifact rather than a RAG-time lookup all come from there. What this repo adds is a working, opinionated implementation: Obsidian as the browsing layer, Dataview-powered MOCs, Templater wiring, a launchd hook for scheduled maintenance, and an agent-agnostic schema you can load into Claude Code, Kiro, Codex, Cursor, or any other agent with local file access.
 
-If you use this and improve it — schema tweaks, new template types, better hook patterns — PRs welcome.
+If you use this and improve it — schema tweaks, new template types, better hook patterns — PRs welcome. (GitHub Issues are disabled on this repo to keep maintenance overhead low. To flag a bug or propose a change, open a PR with the fix or use a draft PR as a discussion thread.)
