@@ -8,6 +8,8 @@
 
 Bring your own LLM (Claude Code, Kiro, Codex, Cursor, or any agent that can read and write local files), point it at the schema, and let it do the bookkeeping.
 
+This is a concrete, opinionated implementation of the "LLM Wiki" pattern described by [@karpathy](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) — Obsidian as the IDE, a schema file as the operating manual, a hook script for scheduled maintenance, and a working setup you can clone and use today.
+
 ### How is this different from RAG?
 
 RAG retrieves chunks from raw documents at query time and re-synthesizes an answer from scratch every time. Nothing accumulates. Ask the same subtle question next week and the LLM does the same work over again.
@@ -258,3 +260,11 @@ If you move machines or share the vault:
 | `memex-schema.md` (or its renamed form) | loaded by your LLM agent |
 | `memex-hooks.py` | path of your choice (matches `FLAGS_DIR` setting) |
 | `com.memex.daily.plist` | `~/Library/LaunchAgents/` (macOS) |
+
+---
+
+## Credits
+
+This starter is a concrete implementation of the "LLM Wiki" pattern proposed by Andrej Karpathy in [this gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). The three-layer architecture (raw sources / LLM-maintained wiki / schema document), the `index.md` + `log.md` convention, the schema-as-operating-manual idea, and the framing of the wiki as a compounding artifact rather than a RAG-time lookup all come from there. What this repo adds is a working, opinionated implementation: Obsidian as the browsing layer, Dataview-powered MOCs, Templater wiring, a launchd hook for scheduled maintenance, and an agent-agnostic schema you can load into Claude Code, Kiro, Codex, Cursor, or any other agent with local file access.
+
+If you use this and improve it — schema tweaks, new template types, better hook patterns — PRs welcome.
