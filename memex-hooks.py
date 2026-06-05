@@ -10,7 +10,7 @@ from datetime import date, timedelta
 
 # --- Configure these ---
 VAULT = os.path.expanduser("~/memex-v")          # path to your vault
-FLAGS_DIR = os.path.expanduser("~/.memex")        # where flag files are written
+FLAGS_DIR = os.path.expanduser("~/.memex-flags")  # where flag files are written
                                                    # your LLM agent should check this dir at session start
                                                    # Kiro users may prefer "~/.kiro" so flags sit with other Kiro state
 # -----------------------

@@ -150,7 +150,7 @@ The hook script does two things:
 - Creates `weeklyNotes/<ISO-year>-W<ISO-week>.md` every Monday if it doesn't exist (e.g. `2026-W22.md`).
 - Writes a `lint-due.flag` file if it's been 30+ days since the last lint pass.
 
-Both write flag files into `~/.memex/` (the default — change `FLAGS_DIR` in `memex-hooks.py` if you prefer somewhere else, e.g. `~/.kiro/` for Kiro users). Your LLM checks the flag dir at session start.
+Both write flag files into `~/.memex-flags/` (the default — change `FLAGS_DIR` in `memex-hooks.py` if you prefer somewhere else, e.g. `~/.kiro/` for Kiro users). Your LLM checks the flag dir at session start.
 
 If you cloned the repo into `~/memex-v` (Quickstart default), `memex-hooks.py` is already in place. Otherwise, move it somewhere stable and edit `VAULT` + `FLAGS_DIR` at the top of the script to match your paths.
 

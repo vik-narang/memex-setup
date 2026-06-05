@@ -6,7 +6,7 @@ Wrap up the current session. Use the rules in `memex-schema.md` — specifically
 
 Steps:
 
-1. **Drain any pending transcripts.** The flag dir is configured in `memex-schema.md` § Scheduled Maintenance (default `~/.memex/`). For each `.jsonl` file in `<FLAGS_DIR>/pending-wrapups/`:
+1. **Drain any pending transcripts.** The flag dir is configured in `memex-schema.md` § Scheduled Maintenance (default `~/.memex-flags/`). For each `.jsonl` file in `<FLAGS_DIR>/pending-wrapups/`:
    - Read it. Each line is one turn from a prior session that ended without `/wrap-up` being run.
    - Extract substantive material per the same rules used for this session in step 2.
    - Roll any findings into the proposal in step 3.

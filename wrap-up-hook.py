@@ -17,7 +17,7 @@ from datetime import datetime
 
 # --- Configure these ---
 VAULT = os.path.expanduser("~/memex-v")           # path to your vault
-FLAGS_DIR = os.path.expanduser("~/.memex")         # where flag files are written
+FLAGS_DIR = os.path.expanduser("~/.memex-flags")   # where flag files are written
 # -----------------------
 
 PENDING_DIR = os.path.join(FLAGS_DIR, "pending-wrapups")

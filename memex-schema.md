@@ -127,10 +127,10 @@ Quick scan: `grep "^## \[" log.md | tail -10`
 
 ## Scheduled Maintenance
 
-**Flag directory.** Defaults to `~/.memex/`. Configurable in `memex-hooks.py` (`FLAGS_DIR`). Kiro users may prefer `~/.kiro/` so the flags sit alongside their other Kiro state.
+**Flag directory.** Defaults to `~/.memex-flags/`. Configurable in `memex-hooks.py` (`FLAGS_DIR`). Kiro users may prefer `~/.kiro/` so the flags sit alongside their other Kiro state.
 
 ### Weekly Note (every Monday — ISO week)
-- A hook/cron script creates `weeklyNotes/<ISO-year>-W<ISO-week>.md` if it doesn't exist (e.g. `2026-W22.md`), writes a flag file (e.g. `~/.memex/weekly-note-created.flag`)
+- A hook/cron script creates `weeklyNotes/<ISO-year>-W<ISO-week>.md` if it doesn't exist (e.g. `2026-W22.md`), writes a flag file (e.g. `~/.memex-flags/weekly-note-created.flag`)
 - At session start: if flag exists, mention the creation silently, delete flag
 - Set a Friday ~3pm calendar reminder to review the week's note
 
@@ -141,7 +141,7 @@ Quick scan: `grep "^## \[" log.md | tail -10`
 - See `## Operations § Wrap-Up` for the step-by-step
 
 ### Lint (every 30 days)
-- A hook/cron script checks `log.md` for the last `lint` entry; if 30+ days ago, writes a flag file (e.g. `~/.memex/lint-due.flag`)
+- A hook/cron script checks `log.md` for the last `lint` entry; if 30+ days ago, writes a flag file (e.g. `~/.memex-flags/lint-due.flag`)
 - At session start: if flag exists, surface the reminder, create a calendar block on the closest Friday to the 30-day mark, delete flag
 - Lint checks: orphans, missing cross-references, contradictions, stale claims, missing `archived`, missing tags
 
